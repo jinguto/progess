@@ -1,0 +1,16 @@
+进程隐藏技术：
+进程伪装：通过修改指定进程PEB中的路径和命令行信息实现伪装。
+傀儡进程：通过进程挂起，替换内存数据再恢复执行，从而实现创建傀儡进程
+进程隐藏：通过HOOK函数ZwQuerySystemInfornation实现进程隐藏
+DLL劫持：通过#pragma comment指令直接转发DLL导出函数或者通过LoadLibrary和GetProcAddress函数获取DLL导出函数并调用
+
+
+进程伪装
+对病毒木马来说，最简单的进程伪装方式就是修改进程名，例如将本地文件名修改成services.exe等系统进程名，从而不被用户发现。进程伪装指的是可以修改任意指定进程信息，即该进程信息再系统中显示的是另一个进程的信息。这样指定进程和伪装进程相同，但实际，执行的操作是不同的
+__kernel_entry NTSTATUS NtQueryInformationProcess(
+  IN HANDLE           ProcessHandle,	//目标进程句柄
+  IN PROCESSINFOCLASS ProcessInformationClass,	//获取信息类型
+  OUT PVOID           ProcessInformation,	//指向调用应用程序提供的缓冲区的指针，函数将所请求的信息写入该缓冲区。
+  IN ULONG            ProcessInformationLength,//ProcessInformation缓冲区大小
+  OUT PULONG          ReturnLength //函数返回请求信息的大小
+);
